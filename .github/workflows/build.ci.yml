@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "*.kt"
-      - "*.kts"
-      - gradle
-      - build.gradle.kts
-      - gradle.properties
-      - settings.gradle.kts
-      - .github/workflows/build.ci.yml
 
   pull_request:
     paths:

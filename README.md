@@ -4,7 +4,7 @@
 
 
 
-| Uncached build (**1 minute  25 seconds**)                | Cached build (**31 seconds**)                            |
+| Uncached build (**1 minute  25 seconds**)                | Cached build (**32 seconds**)                            |
 |----------------------------------------------------------|----------------------------------------------------------|
 | <img src="docs/build-cli-clean.png" alt="Clean build" /> | <img src="docs/build-cli-repeat.png" alt="Cached build"> |
 
