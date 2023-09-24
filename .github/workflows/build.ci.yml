@@ -3,7 +3,7 @@ name: "Build: Sample"
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - "*.kt"
       - "*.kts"
