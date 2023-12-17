@@ -1,17 +1,46 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.gradle.android.cache-fix") version "2.8.0"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.gradle.android.cachefix)
+    alias(libs.plugins.testlogger)
+}
+
+val javaTarget = JavaVersion.VERSION_17
+
+/**
+ * Kotlin Compiler Args
+ */
+val kotlinCompilerArgs = listOf(
+  "-Xallow-unstable-dependencies",
+  "-Xcontext-receivers",
+  "-Xemit-jvm-type-annotations",
+  "-Xlambdas=indy",
+  "-Xsam-conversions=indy",
+  "-Xjsr305=strict",
+  "-Xjvm-default=all",
+
+  // Fix: Suppress Kotlin version compatibility check for Compose plugin (applied by Mosaic)
+  "-P=plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.sdk.get()}",
+)
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+        javaParameters = true
+        freeCompilerArgs = kotlinCompilerArgs.plus(freeCompilerArgs.get())
+    }
 }
 
 android {
     namespace = "com.example.sample_android_gradle"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.sample_android_gradle"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -23,23 +52,29 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = javaTarget
+        targetCompatibility = javaTarget
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = javaTarget.toString()
+        javaParameters = true
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -48,20 +83,20 @@ android {
 }
 
 dependencies {
+    api(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

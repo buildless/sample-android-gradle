@@ -1,4 +1,25 @@
 plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.8.10" apply false
+    // Top-level plugins, applied to the project root.
+    alias(libs.plugins.doctor)
+    alias(libs.plugins.jetbrains.intellij.ext)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.versions.check)
+    alias(libs.plugins.versions.catalog.update)
+}
+
+doctor {
+    disallowMultipleDaemons = true
+    enableTestCaching = true
+    failOnEmptyDirectories = true
+    disallowCleanTaskDependencies = true
+    warnIfKotlinCompileDaemonFallback = true
+    warnWhenNotUsingParallelGC = false
+    downloadSpeedWarningThreshold = .6f
+
+    javaHome {
+        ensureJavaHomeMatches = true
+        ensureJavaHomeIsSet = true
+        failOnError = false
+    }
 }

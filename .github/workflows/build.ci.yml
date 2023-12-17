@@ -29,6 +29,6 @@ jobs:
       actions: read
       contents: write
     with:
-      jvm: '19'
+      jvm: '21'
       runner: ubuntu-latest
       flags: '--scan --stacktrace'
