@@ -18,7 +18,7 @@ jobs:
   ## Build sample app
   build-sample:
     name: "Sample App"
-    uses: elide-dev/build-infra/.github/workflows/jvm.gradle.yml@main
+    uses: elide-dev/build-infra/.github/workflows/android.yml@main
     secrets:
       BUILDLESS_APIKEY: ${{ secrets.BUILDLESS_APIKEY }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -29,6 +29,5 @@ jobs:
       actions: read
       contents: write
     with:
-      jvm: '21'
-      runner: ubuntu-latest
       flags: '--scan --stacktrace'
+
