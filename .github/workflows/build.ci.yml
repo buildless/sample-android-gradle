@@ -3,17 +3,13 @@ name: "Build: Sample"
 on:
   push:
     branches:
-      - master
+      - main
 
   pull_request:
-    paths:
-      - "*.kt"
-      - "*.kts"
-      - gradle
-      - build.gradle.kts
-      - gradle.properties
-      - settings.gradle.kts
-      - .github/workflows/build.ci.yml
+    branches:
+      - main
+
+  workflow_dispatch: {}
 
   schedule:
     - cron: '30 */2 * * *'
